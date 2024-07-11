@@ -1,13 +1,25 @@
-import express, { json, urlencoded } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import bookRoute from "./routes/book.route.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT;
 
+// cors middleware
+// app.use(cors())  // this allows all websites to access our API
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 // middleware
-app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // routing
 app.use("/api/books", bookRoute);

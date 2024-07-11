@@ -24,16 +24,17 @@ export const getBookById = async (req, res) => {
 
 export const addBook = async (req, res) => {
   try {
-    const book = await Book.create(req.body);
-    if (!res.body.title || !res.body.author || !res.body.publishYear) {
-      const message = !res.body.title
+    if (!req.body.title || !req.body.author || !req.body.publishYear) {
+      const message = !req.body.title
         ? "title field cannot be empty"
-        : !res.body.author
+        : !req.body.author
         ? "author field cannot be empty"
         : "publish year field cannot be empty";
       return res.status(400).json({ message: message });
     }
-    res.status(200).json({ message: "Book added successfully" });
+
+    const book = await Book.create(req.body);
+    res.status(201).json(book);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
